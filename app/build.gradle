@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // Androidプラグインに使用しているバージョンに書き換える
+        classpath 'com.android.tools.build:gradle:0.13.2'
+        // Android Gradle プラグイン0.11から、android-apt 1.3以上を使わなければいけない
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.+'
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+apply plugin: "com.android.application"
+apply plugin: 'android-apt'
+
+dependencies {
+    apt 'org.androidannotations:androidannotations:3.2'
+    compile 'org.androidannotations:androidannotations-api:3.2'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // その他の必要な依存ライブラリー
+    compile 'com.android.support:appcompat-v7:21.0.0'
+    compile 'com.android.support:cardview-v7:21.0.0'
+    compile 'com.android.support:recyclerview-v7:21.0.0'
+    compile 'com.mcxiaoke.volley:library:1.0.8'
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.j256.ormlite:ormlite-android:4.48'
+    compile 'org.jsoup:jsoup:1.8.1'
+    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'commons-io:commons-io:2.4'
+}
+
+apt {
+    arguments {
+        androidManifestFile variant.processResources.manifestFile
+        resourcePackageName android.defaultConfig.applicationId
+
+        // 追加のアノテーションプロセッシングオプションを下記のように指定可能
+        // logLevel 'INFO'
+        // logFile '/var/log/aa.log'
+    }
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.1"
+
+    defaultConfig {
+        applicationId "com.niusounds.matomeviewer"
+        minSdkVersion 16
+        targetSdkVersion 21
+        versionCode 20
+        versionName "2.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
