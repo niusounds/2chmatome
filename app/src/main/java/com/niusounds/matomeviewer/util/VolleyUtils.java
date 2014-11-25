@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.ImageLoader;
@@ -41,19 +42,25 @@ public class VolleyUtils {
         });
     }
 
-    public <T> void request(String url, Class<T> clazz, Response.Listener<T> listener, Response.ErrorListener errorListener) {
-        queue.add(new GsonRequest<T>(url, clazz, null, listener, errorListener));
+    public <T> Request<T> request(String url, Class<T> clazz, Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        GsonRequest<T> request = new GsonRequest<>(url, clazz, null, listener, errorListener);
+        queue.add(request);
+        return request;
     }
 
-    public void image(String url, Response.Listener<Bitmap> listener, int maxWidth, int maxHeight, Bitmap.Config decodeConfig, Response.ErrorListener errorListener) {
-        queue.add(new ImageRequest(url, listener, maxWidth, maxHeight, decodeConfig, errorListener));
+    public Request<Bitmap> image(String url, Response.Listener<Bitmap> listener, int maxWidth, int maxHeight, Bitmap.Config decodeConfig, Response.ErrorListener errorListener) {
+        ImageRequest request = new ImageRequest(url, listener, maxWidth, maxHeight, decodeConfig, errorListener);
+        queue.add(request);
+        return request;
+    }
+
+    public Request<String> requestString(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        StringRequest request = new StringRequest(url, listener, errorListener);
+        queue.add(request);
+        return request;
     }
 
     public ImageLoader getDefaultImageLoader() {
         return imageLoader;
-    }
-
-    public void requestString(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        queue.add(new StringRequest(url, listener, errorListener));
     }
 }

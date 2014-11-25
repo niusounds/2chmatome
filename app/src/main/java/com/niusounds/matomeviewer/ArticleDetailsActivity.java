@@ -1,5 +1,7 @@
 package com.niusounds.matomeviewer;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -18,6 +20,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.apache.commons.io.IOUtils;
@@ -29,6 +32,7 @@ import org.jsoup.safety.Whitelist;
 import java.io.IOException;
 
 @EActivity(R.layout.activity_article_details)
+@OptionsMenu(R.menu.menu_details)
 public class ArticleDetailsActivity extends ActionBarActivity {
     @Extra
     Article article;
@@ -54,7 +58,7 @@ public class ArticleDetailsActivity extends ActionBarActivity {
 
     @AfterViews
     void loadContent() {
-        // 短いコンテンツを一時表示して完全コンテンツを取得する
+        // 短いコンテンツを一時表示している間に完全コンテンツを取得する
         applyHtml(article.contentEncoded);
         v.requestString(article.link, new Response.Listener<String>() {
             @Override
@@ -115,6 +119,21 @@ public class ArticleDetailsActivity extends ActionBarActivity {
     @UiThread(delay = 500)
     void hideText() {
         text.animate().translationY(text.getHeight());
+    }
+
+    @OptionsItem
+    void menuOpenBrowser() {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(article.link)));
+    }
+
+    @OptionsItem
+    void menuShare() {
+        startActivity(
+                Intent.createChooser(
+                        new Intent(Intent.ACTION_SEND)
+                                .setType("text/plain")
+                                .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text, article.title, article.link)),
+                        getText(R.string.menu_share)));
     }
 
     @Override

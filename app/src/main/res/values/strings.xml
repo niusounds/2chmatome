@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">2chmatome</string>
+    <string name="app_name">2chまとめ</string>
+    <string name="articles">記事一覧</string>
     <string name="loading">読み込み中…</string>
     <string name="complete">完了！</string>
+    <string name="menu_open_browser">ブラウザーで開く</string>
+    <string name="menu_share">シェア</string>
+    <string name="share_text" formatted="false">%1s - %2s</string>
 
 </resources>

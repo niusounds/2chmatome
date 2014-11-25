@@ -51,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
     @AfterViews
     void initToolbar() {
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.articles);
     }
 
     @AfterViews
