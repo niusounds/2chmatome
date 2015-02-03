@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -16,10 +17,14 @@ import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @EBean(scope = EBean.Scope.Singleton)
 public class VolleyUtils {
     private RequestQueue queue;
     private ImageLoader imageLoader;
+    private Map<String, String> header = new HashMap<>();
 
     @RootContext
     Context ctx;
@@ -40,6 +45,8 @@ public class VolleyUtils {
                 cache.put(url, bitmap);
             }
         });
+
+        header.put("User-Agent", "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19");
     }
 
     public <T> Request<T> request(String url, Class<T> clazz, Response.Listener<T> listener, Response.ErrorListener errorListener) {
@@ -55,7 +62,12 @@ public class VolleyUtils {
     }
 
     public Request<String> requestString(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        StringRequest request = new StringRequest(url, listener, errorListener);
+        StringRequest request = new StringRequest(url, listener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return header;
+            }
+        };
         queue.add(request);
         return request;
     }
