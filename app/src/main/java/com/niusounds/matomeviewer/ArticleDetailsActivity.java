@@ -2,8 +2,9 @@ package com.niusounds.matomeviewer;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
@@ -32,8 +33,8 @@ import org.jsoup.safety.Whitelist;
 import java.io.IOException;
 
 @EActivity(R.layout.activity_article_details)
-@OptionsMenu(R.menu.menu_details)
-public class ArticleDetailsActivity extends ActionBarActivity {
+public class ArticleDetailsActivity extends AppCompatActivity {
+
     @Extra
     Article article;
 
@@ -51,9 +52,21 @@ public class ArticleDetailsActivity extends ActionBarActivity {
 
     @AfterViews
     void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(article.title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle(article.title);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_left_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        toolbar.inflateMenu(R.menu.menu_details);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return onOptionsItemSelected(item);
+            }
+        });
     }
 
     @AfterViews
@@ -80,7 +93,14 @@ public class ArticleDetailsActivity extends ActionBarActivity {
         // #article-contents
         Element content = doc.getElementById("article-contents");
         if (content != null) {
-            html = Jsoup.clean(content.html(), Whitelist.simpleText()
+
+            content.select(".article_mid").remove();
+            content.select("span[style=\"font-size: large;\"]").remove();
+            content.select("span[style=\"color: rgb(255, 0, 255);\"]").remove();
+            content.select("a[onclick]").remove();
+
+            html = content.html();
+            html = Jsoup.clean(html, Whitelist.simpleText()
                     .addTags("br")
                     .addAttributes("span", "style")
                     .addAttributes("div", "style")
@@ -134,11 +154,5 @@ public class ArticleDetailsActivity extends ActionBarActivity {
                                 .setType("text/plain")
                                 .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text, article.title, article.link)),
                         getText(R.string.menu_share)));
-    }
-
-    @Override
-    @OptionsItem(android.R.id.home)
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 }

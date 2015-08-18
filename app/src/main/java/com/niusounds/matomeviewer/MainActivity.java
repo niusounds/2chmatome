@@ -1,6 +1,6 @@
 package com.niusounds.matomeviewer;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,8 +23,9 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 @EActivity(R.layout.activity_main)
-public class MainActivity extends ActionBarActivity {
-    private List<Article> articles = new ArrayList<Article>();
+public class MainActivity extends AppCompatActivity {
+
+    private List<Article> articles = new ArrayList<>();
 
     @ViewById
     Toolbar toolbar;
@@ -50,8 +51,7 @@ public class MainActivity extends ActionBarActivity {
 
     @AfterViews
     void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.articles);
+        toolbar.setTitle(R.string.articles);
     }
 
     @AfterViews
