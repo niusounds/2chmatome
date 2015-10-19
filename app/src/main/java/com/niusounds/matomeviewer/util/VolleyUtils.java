@@ -49,12 +49,6 @@ public class VolleyUtils {
         header.put("User-Agent", "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19");
     }
 
-    public <T> Request<T> request(String url, Class<T> clazz, Response.Listener<T> listener, Response.ErrorListener errorListener) {
-        GsonRequest<T> request = new GsonRequest<>(url, clazz, null, listener, errorListener);
-        queue.add(request);
-        return request;
-    }
-
     public Request<Bitmap> image(String url, Response.Listener<Bitmap> listener, int maxWidth, int maxHeight, Bitmap.Config decodeConfig, Response.ErrorListener errorListener) {
         ImageRequest request = new ImageRequest(url, listener, maxWidth, maxHeight, decodeConfig, errorListener);
         queue.add(request);

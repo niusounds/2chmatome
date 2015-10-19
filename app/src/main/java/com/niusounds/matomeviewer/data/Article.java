@@ -1,9 +1,5 @@
 package com.niusounds.matomeviewer.data;
 
-import com.google.gson.annotations.SerializedName;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,8 +10,6 @@ public class Article implements Serializable, Comparable<Article> {
     public String description;
     public Date date;
     public String pubDate;
-
-    @SerializedName("content:encoded")
     public String contentEncoded;
 
     @Override

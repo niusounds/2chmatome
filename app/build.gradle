@@ -19,21 +19,23 @@ apply plugin: "com.android.application"
 apply plugin: 'android-apt'
 
 dependencies {
-    apt 'org.androidannotations:androidannotations:3.3.1'
-    compile 'org.androidannotations:androidannotations-api:3.3.1'
+    String AAVer = '3.3.2'
+    apt "org.androidannotations:androidannotations:$AAVer"
+    compile "org.androidannotations:androidannotations-api:$AAVer"
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    // その他の必要な依存ライブラリー
-    compile 'com.android.support:appcompat-v7:23.0.0'
-    compile 'com.android.support:cardview-v7:23.0.0'
-    compile 'com.android.support:recyclerview-v7:23.0.0'
-    compile 'com.mcxiaoke.volley:library:1.0.8'
-    compile 'com.google.code.gson:gson:2.3'
-    compile 'com.j256.ormlite:ormlite-android:4.48'
+    String supportLibVer = '23.1.0'
+    compile "com.android.support:appcompat-v7:$supportLibVer"
+    compile "com.android.support:cardview-v7:$supportLibVer"
+    compile "com.android.support:recyclerview-v7:$supportLibVer"
+
+    String playServiceVer = '8.1.0';
+    compile "com.google.android.gms:play-services-analytics:$playServiceVer"
+
+    compile 'com.mcxiaoke.volley:library:1.0.9'
     compile 'org.jsoup:jsoup:1.8.3'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'commons-io:commons-io:2.4'
-    compile 'com.google.android.gms:play-services-analytics:7.8.0'
 }
 
 apt {
@@ -49,14 +51,14 @@ apt {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "21.1.2"
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "com.niusounds.matomeviewer"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 213
-        versionName "2.1.3"
+        versionCode 220
+        versionName "2.2"
     }
     buildTypes {
         release {
