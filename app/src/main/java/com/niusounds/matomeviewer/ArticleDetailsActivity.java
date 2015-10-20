@@ -93,10 +93,12 @@ public class ArticleDetailsActivity extends AppCompatActivity {
         Element content = doc.getElementById("article-contents");
         if (content != null) {
 
-            content.select(".article_mid").remove();
+            content.select("iframe").remove();
+            content.select(".link2, .article_mid, .no-pc, .linkh").remove();
             content.select("span[style=\"font-size: large;\"]").remove();
             content.select("span[style=\"color: rgb(255, 0, 255);\"]").remove();
             content.select("a[onclick]").remove();
+            content.select("a[rel=nofollow]").remove();
 
             html = content.html();
             html = Jsoup.clean(html, Whitelist.simpleText()

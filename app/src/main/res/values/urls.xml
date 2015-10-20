@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="urls">
+        <item>http://blog.livedoor.jp/dqnplus/index.rdf</item>
+        <item>http://hamusoku.com/index.rdf</item>
+        <item>http://www.akb48matomemory.com/index.rdf</item>
+        <item>http://blog.livedoor.jp/nwknews/index.rdf</item>
+        <item>http://blog.livedoor.jp/rbkyn844/index.rdf</item>
+    </string-array>
+</resources>

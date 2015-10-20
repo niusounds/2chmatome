@@ -6,6 +6,7 @@ import com.niusounds.matomeviewer.event.NewArticleEvent;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.res.StringArrayRes;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.w3c.dom.Node;
@@ -26,22 +27,17 @@ import de.greenrobot.event.EventBus;
 @EBean
 public class Api {
 
-    //    private static final String URL_MATOME = "https://pipes.yahoo.com/pipes/pipe.run?_id=5e4b0f39af93d30a0d9c2b29bca588ea&_render=json";
-    //    private static final String URL_NEWSOKU = "http://pipes.yahoo.com/pipes/pipe.run?_id=f74242166c519e8664aedb178517efbc&_render=json";
-    //    private static final String URL_HAMUSOKU = "http://pipes.yahoo.com/pipes/pipe.run?_id=e9f04da946810163052385717f445ace&_render=json";
-
-    private static final String URL_MATOME = "http://blog.livedoor.jp/dqnplus/index.rdf";
-//    private static final String URL_NEWSOKU = "http://new-soku.net/rss/index_new_img.rdf";
-
     private EventBus eventBus = EventBus.getDefault();
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
 
+    @StringArrayRes
+    String[] urls;
+
     @Background
     public void loadAll() {
-        parse(URL_MATOME);
-//        parse(URL_NEWSOKU);
-//        v.request(URL_NEWSOKU, YahooPipesResponse.class, this, this);
-//        v.request(URL_HAMUSOKU, YahooPipesResponse.class, this, this);
+        for (String url : urls) {
+            parse(url);
+        }
     }
 
     private void parse(String url) {
