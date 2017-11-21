@@ -17,7 +17,6 @@ dependencies {
     implementation 'com.android.volley:volley:1.0.0'
     implementation 'org.jsoup:jsoup:1.8.3'
     implementation 'de.greenrobot:eventbus:2.4.0'
-    implementation 'commons-io:commons-io:2.4'
 }
 
 android {

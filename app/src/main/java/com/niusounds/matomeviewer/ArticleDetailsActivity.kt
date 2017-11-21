@@ -12,7 +12,6 @@ import com.android.volley.Response
 import com.niusounds.matomeviewer.data.Article
 import com.niusounds.matomeviewer.util.VolleyUtils
 import org.androidannotations.annotations.*
-import org.apache.commons.io.IOUtils
 import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist
 import java.io.IOException
@@ -76,7 +75,7 @@ open class ArticleDetailsActivity : AppCompatActivity() {
 
             // apply template
             try {
-                val template = IOUtils.toString(resources.openRawResource(R.raw.template), "UTF-8")
+                val template = resources.openRawResource(R.raw.template).bufferedReader().readText()
                 html = template.replace("{{content}}", html)
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -118,6 +117,6 @@ open class ArticleDetailsActivity : AppCompatActivity() {
                 Intent.createChooser(
                         Intent(Intent.ACTION_SEND)
                                 .setType("text/plain")
-                                .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text, article!!.title, article!!.link)), getText(R.string.menu_share)))
+                                .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text, article.title, article.link)), getText(R.string.menu_share)))
     }
 }

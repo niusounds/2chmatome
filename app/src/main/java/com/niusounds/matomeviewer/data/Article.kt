@@ -12,7 +12,7 @@ class Article : Serializable, Comparable<Article> {
     var pubDate: String? = null
     var contentEncoded: String? = null
 
-    override fun compareTo(other: Article): Int {
-        return if (other.date == null || date == null) 0 else other.date!!.compareTo(date)
-    }
+    override fun compareTo(other: Article): Int =
+            if (other.date == null || date == null) 0
+            else other.date!!.compareTo(date)
 }

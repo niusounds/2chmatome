@@ -2,22 +2,13 @@ package com.niusounds.matomeviewer
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-
 import com.niusounds.matomeviewer.data.Article
-
 import org.androidannotations.annotations.EBean
-
-import java.util.Collections
-import java.util.Date
-import java.util.TreeMap
 
 @EBean
 open class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
-    private var articles = emptyList<Article>()
 
-    fun setArticles(articles: List<Article>) {
-        this.articles = articles
-    }
+    var articles: List<Article> = emptyList()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ArticleAdapter.ViewHolder {
         return ViewHolder(ItemView_.build(viewGroup.context))
@@ -27,9 +18,7 @@ open class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
         viewHolder.view.bind(articles[i])
     }
 
-    override fun getItemCount(): Int {
-        return articles.size
-    }
+    override fun getItemCount(): Int = articles.size
 
-    class ViewHolder(internal var view: ItemView) : RecyclerView.ViewHolder(view)
+    class ViewHolder(var view: ItemView) : RecyclerView.ViewHolder(view)
 }

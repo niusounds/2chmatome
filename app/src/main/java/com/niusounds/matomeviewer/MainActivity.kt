@@ -14,12 +14,11 @@ import org.androidannotations.annotations.AfterViews
 import org.androidannotations.annotations.Bean
 import org.androidannotations.annotations.EActivity
 import org.androidannotations.annotations.ViewById
-import java.util.*
 
 @EActivity(R.layout.activity_main)
 open class MainActivity : AppCompatActivity() {
 
-    private val articles = ArrayList<Article>()
+    private val articles = mutableListOf<Article>()
 
     @ViewById
     lateinit var toolbar: Toolbar
@@ -53,7 +52,7 @@ open class MainActivity : AppCompatActivity() {
         list.itemAnimator = DefaultItemAnimator()
         list.addItemDecoration(DividerItemDecoration(this))
         list.adapter = adapter
-        adapter.setArticles(articles)
+        adapter.articles = articles
     }
 
     @AfterViews
@@ -61,13 +60,21 @@ open class MainActivity : AppCompatActivity() {
         api.loadAll()
     }
 
+    /**
+     * Notified when tapped on [ItemView].
+     */
     fun onEvent(e: ArticleClickEvent) {
-        ArticleDetailsActivity_.intent(this).article(e.article).start()
+        ArticleDetailsActivity_.intent(this)
+                .article(e.article)
+                .start()
     }
 
+    /**
+     * Notified when new [Article] is available.
+     */
     fun onEvent(e: NewArticleEvent) {
         articles.add(e.article)
-        Collections.sort(articles)
+        articles.sort()
         adapter.notifyDataSetChanged()
     }
 }

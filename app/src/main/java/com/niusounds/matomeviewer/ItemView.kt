@@ -38,7 +38,7 @@ open class ItemView(context: Context) : FrameLayout(context), View.OnClickListen
     }
 
     @AfterInject
-    internal fun init() {
+    fun init() {
         setPadding(0, articleListPadding, 0, articleListPadding)
     }
 
@@ -49,6 +49,8 @@ open class ItemView(context: Context) : FrameLayout(context), View.OnClickListen
     }
 
     override fun onClick(view: View) {
-        EventBus.getDefault().post(ArticleClickEvent(article!!))
+        if (article != null) {
+            EventBus.getDefault().post(ArticleClickEvent(article!!))
+        }
     }
 }
