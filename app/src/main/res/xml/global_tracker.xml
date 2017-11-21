@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="ga_sessionTimeout">300</integer>
-    <bool name="ga_autoActivityTracking">true</bool>
-    <screenName name="MainActivity_">メイン画面</screenName>
-    <screenName name="ArticleDetailsActivity_">記事画面</screenName>
-    <string name="ga_trackingId">UA-66446451-1</string>
-</resources>
