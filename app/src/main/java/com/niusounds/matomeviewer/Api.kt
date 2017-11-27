@@ -1,11 +1,11 @@
 package com.niusounds.matomeviewer
 
 import com.niusounds.matomeviewer.data.Article
-import com.niusounds.matomeviewer.event.NewArticleEvent
+import com.niusounds.matomeviewer.data.DatabaseManager
 import de.greenrobot.event.EventBus
 import org.androidannotations.annotations.Background
+import org.androidannotations.annotations.Bean
 import org.androidannotations.annotations.EBean
-import org.androidannotations.annotations.UiThread
 import org.androidannotations.annotations.res.StringArrayRes
 import org.jsoup.Jsoup
 import org.w3c.dom.Node
@@ -26,6 +26,9 @@ open class Api {
 
     @StringArrayRes
     lateinit var urls: Array<String>
+
+    @Bean
+    lateinit var databaseManager: DatabaseManager
 
     fun loadAll() {
         urls.forEach { url -> parse(url) }
@@ -81,11 +84,6 @@ open class Api {
             e.printStackTrace()
         }
 
-        postArticle(article)
-    }
-
-    @UiThread
-    open fun postArticle(article: Article) {
-        eventBus.post(NewArticleEvent(article))
+        databaseManager.articleDao.save(article)
     }
 }
