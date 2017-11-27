@@ -3,10 +3,8 @@ package com.niusounds.matomeviewer
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.niusounds.matomeviewer.data.Article
-import org.androidannotations.annotations.EBean
 
-@EBean
-open class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
+class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
     var articles: List<Article> = emptyList()
 

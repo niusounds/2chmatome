@@ -1,53 +1,55 @@
 package com.niusounds.matomeviewer
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.View
-import android.webkit.WebView
-import android.widget.ProgressBar
-import android.widget.TextView
 import com.android.volley.Response
 import com.niusounds.matomeviewer.data.Article
+import com.niusounds.matomeviewer.data.DatabaseManager
 import com.niusounds.matomeviewer.util.VolleyUtils
+import kotlinx.android.synthetic.main.activity_article_details.*
 import org.androidannotations.annotations.*
 import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist
 import java.io.IOException
 
-@EActivity(R.layout.activity_article_details)
+@EActivity
 open class ArticleDetailsActivity : AppCompatActivity() {
 
-    @Extra
-    lateinit var article: Article
+    private var article: Article? = null
 
-    @ViewById
-    lateinit var toolbar: Toolbar
-    @ViewById
-    lateinit var webview: WebView
-    @ViewById
-    lateinit var progress: ProgressBar
-    @ViewById
-    lateinit var text: TextView
+    @Extra
+    lateinit var link: String
 
     @Bean
     lateinit var v: VolleyUtils
+    @Bean
+    lateinit var databaseManager: DatabaseManager
 
-    @AfterViews
-    fun initToolbar() {
-        toolbar.title = article.title
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_article_details)
+
+        databaseManager.articleDao.findByUrl(link).observe(this, Observer<Article> { article ->
+            this.article = article
+
+            if (article != null) {
+                toolbar.title = article.title
+
+                // 短いコンテンツを一時表示している間に完全コンテンツを取得する
+                applyHtml(article.contentEncoded)
+                v.requestString(article.link, Response.Listener { html -> parse(html) }, Response.ErrorListener { finish() })
+            }
+        })
+
+        // Init toolbar
         toolbar.setNavigationIcon(R.drawable.ic_arrow_left_white_24dp)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         toolbar.inflateMenu(R.menu.menu_details)
         toolbar.setOnMenuItemClickListener { item -> onOptionsItemSelected(item) }
-    }
-
-    @AfterViews
-    fun loadContent() {
-        // 短いコンテンツを一時表示している間に完全コンテンツを取得する
-        applyHtml(article.contentEncoded)
-        v.requestString(article.link!!, Response.Listener { html -> parse(html) }, Response.ErrorListener { finish() })
     }
 
     @Background
@@ -108,15 +110,19 @@ open class ArticleDetailsActivity : AppCompatActivity() {
 
     @OptionsItem
     fun menuOpenBrowser() {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(article.link)))
+        article?.let { article ->
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(article.link)))
+        }
     }
 
     @OptionsItem
     fun menuShare() {
-        startActivity(
-                Intent.createChooser(
-                        Intent(Intent.ACTION_SEND)
-                                .setType("text/plain")
-                                .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text, article.title, article.link)), getText(R.string.menu_share)))
+        article?.let { article ->
+            startActivity(
+                    Intent.createChooser(
+                            Intent(Intent.ACTION_SEND)
+                                    .setType("text/plain")
+                                    .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text, article.title, article.link)), getText(R.string.menu_share)))
+        }
     }
 }

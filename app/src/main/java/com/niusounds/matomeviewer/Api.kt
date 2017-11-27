@@ -2,16 +2,12 @@ package com.niusounds.matomeviewer
 
 import com.niusounds.matomeviewer.data.Article
 import com.niusounds.matomeviewer.data.DatabaseManager
-import de.greenrobot.event.EventBus
 import org.androidannotations.annotations.Background
 import org.androidannotations.annotations.Bean
 import org.androidannotations.annotations.EBean
 import org.androidannotations.annotations.res.StringArrayRes
 import org.jsoup.Jsoup
 import org.w3c.dom.Node
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 
 @EBean
@@ -21,9 +17,6 @@ open class Api {
         val documentBuilderFactory: DocumentBuilderFactory = DocumentBuilderFactory.newInstance()
     }
 
-    private val eventBus = EventBus.getDefault()
-    private val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ", Locale.US)
-
     @StringArrayRes
     lateinit var urls: Array<String>
 
@@ -31,7 +24,7 @@ open class Api {
     lateinit var databaseManager: DatabaseManager
 
     fun loadAll() {
-        urls.forEach { url -> parse(url) }
+        urls.forEach(this::parse)
     }
 
     @Background
@@ -78,12 +71,6 @@ open class Api {
 
         val doc = Jsoup.parse(article.contentEncoded)
         article.imageUrl = doc.getElementsByTag("img").attr("src")
-        try {
-            article.date = format.parse(article.pubDate)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-
         databaseManager.articleDao.save(article)
     }
 }

@@ -15,6 +15,9 @@ interface ArticleDao {
     @Query("SELECT * FROM article ORDER BY pubDate DESC LIMIT :limit")
     fun getAll(limit: Int = 100): LiveData<List<Article>>
 
+    @Query("SELECT * FROM article WHERE link = :link")
+    fun findByUrl(link: String): LiveData<Article>
+
     /**
      * 記事を保存する。メインスレッドで呼んではいけない。
      */
